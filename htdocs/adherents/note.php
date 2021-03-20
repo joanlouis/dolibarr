@@ -57,9 +57,12 @@ include DOL_DOCUMENT_ROOT.'/core/actions_setnotes.inc.php'; // Must be include, 
 /*
  * View
  */
+
 $title = $langs->trans("Member")." - ".$langs->trans("Note");
-$helpurl = "EN:Module_Foundations|FR:Module_Adh&eacute;rents|ES:M&oacute;dulo_Miembros";
-llxHeader("", $title, $helpurl);
+
+$help_url = "EN:Module_Foundations|FR:Module_Adh&eacute;rents|ES:M&oacute;dulo_Miembros|DE:Modul_Mitglieder";
+
+llxHeader("", $title, $help_url);
 
 $form = new Form($db);
 
@@ -91,8 +94,8 @@ if ($id) {
 	// Morphy
 	print '<tr><td class="titlefield">'.$langs->trans("MemberNature").'</td><td class="valeur" >'.$object->getmorphylib().'</td>';
 	/*print '<td rowspan="'.$rowspan.'" class="center" valign="middle" width="25%">';
-    print $form->showphoto('memberphoto',$member);
-    print '</td>';*/
+	print $form->showphoto('memberphoto',$member);
+	print '</td>';*/
 	print '</tr>';
 
 	// Company

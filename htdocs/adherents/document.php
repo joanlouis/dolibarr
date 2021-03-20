@@ -50,12 +50,18 @@ $limit = GETPOST('limit', 'int') ? GETPOST('limit', 'int') : $conf->liste_limit;
 $sortfield = GETPOST("sortfield", 'alpha');
 $sortorder = GETPOST("sortorder", 'alpha');
 $page = GETPOSTISSET('pageplusone') ? (GETPOST('pageplusone') - 1) : GETPOST("page", 'int');
-if (empty($page) || $page == -1) { $page = 0; }     // If $page is not defined, or '' or -1
+if (empty($page) || $page == -1) {
+	$page = 0;
+}     // If $page is not defined, or '' or -1
 $offset = $limit * $page;
 $pageprev = $page - 1;
 $pagenext = $page + 1;
-if (!$sortorder) $sortorder = "ASC";
-if (!$sortfield) $sortfield = "name";
+if (!$sortorder) {
+	$sortorder = "ASC";
+}
+if (!$sortfield) {
+	$sortfield = "name";
+}
 
 
 $form = new Form($db);
@@ -73,7 +79,7 @@ $upload_dir = $conf->adherent->dir_output."/".get_exdir(0, 0, 0, 1, $object, 'me
  * Actions
  */
 
-include_once DOL_DOCUMENT_ROOT.'/core/actions_linkedfiles.inc.php';
+include DOL_DOCUMENT_ROOT.'/core/actions_linkedfiles.inc.php';
 
 
 /*
@@ -83,8 +89,10 @@ include_once DOL_DOCUMENT_ROOT.'/core/actions_linkedfiles.inc.php';
 $form = new Form($db);
 
 $title = $langs->trans("Member")." - ".$langs->trans("Documents");
-$helpurl = "EN:Module_Foundations|FR:Module_Adh&eacute;rents|ES:M&oacute;dulo_Miembros";
-llxHeader("", $title, $helpurl);
+
+$help_url = "EN:Module_Foundations|FR:Module_Adh&eacute;rents|ES:M&oacute;dulo_Miembros|DE:Modul_Mitglieder";
+
+llxHeader("", $title, $help_url);
 
 if ($id > 0) {
 	$result = $membert->fetch($object->typeid);
@@ -96,8 +104,9 @@ if ($id > 0) {
 			$totalsize += $file['size'];
 		}
 
-		if (!empty($conf->notification->enabled))
+		if (!empty($conf->notification->enabled)) {
 			$langs->load("mails");
+		}
 
 		$head = member_prepare_head($object);
 
@@ -125,8 +134,8 @@ if ($id > 0) {
 		// Morphy
 		print '<tr><td class="titlefield">'.$langs->trans("MemberNature").'</td><td class="valeur" >'.$object->getmorphylib().'</td>';
 		/*print '<td rowspan="'.$rowspan.'" class="center" valign="middle" width="25%">';
-        print $form->showphoto('memberphoto',$object);
-        print '</td>';*/
+		print $form->showphoto('memberphoto',$object);
+		print '</td>';*/
 		print '</tr>';
 
 		// Company

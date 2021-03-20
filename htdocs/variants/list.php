@@ -21,6 +21,18 @@ require DOL_DOCUMENT_ROOT.'/variants/class/ProductAttribute.class.php';
 $action = GETPOST('action', 'aZ09');
 $object = new ProductAttribute($db);
 
+$permissiontoread = $user->rights->produit->lire || $user->rights->service->lire;
+
+// Security check
+if (empty($conf->variants->enabled)) {
+	accessforbidden('Module not enabled');
+}
+if ($user->socid > 0) { // Protection if external user
+	accessforbidden();
+}
+//$result = restrictedArea($user, 'variant');
+if (!$permissiontoread) accessforbidden();
+
 
 
 /*
@@ -56,8 +68,7 @@ $variants = $object->fetchAll();
 llxHeader('', $title);
 
 $newcardbutton = '';
-if ($user->rights->produit->creer)
-{
+if ($user->rights->produit->creer) {
 	$newcardbutton .= dolGetButtonTitle($langs->trans('Create'), '', 'fa fa-plus-circle', DOL_URL_ROOT.'/variants/create.php');
 }
 

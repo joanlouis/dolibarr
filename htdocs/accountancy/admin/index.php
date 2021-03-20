@@ -7,6 +7,7 @@
  * Copyright (C) 2014      Juanjo Menent        <jmenent@2byte.es>
  * Copyright (C) 2015      Jean-François Ferry  <jfefe@aternatik.fr>
  * Copyright (C) 2017      Laurent Destailleur  <eldy@destailleur.fr>
+ * Copyright (C) 2021      Ferran Marcet        <fmarcet@2byte.es>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,8 +38,7 @@ require_once DOL_DOCUMENT_ROOT.'/core/lib/date.lib.php';
 $langs->loadLangs(array("compta", "bills", "admin", "accountancy", "other"));
 
 // Security access
-if (empty($user->rights->accounting->chartofaccount))
-{
+if (empty($user->rights->accounting->chartofaccount)) {
 	accessforbidden();
 }
 
@@ -48,8 +48,9 @@ $action = GETPOST('action', 'aZ09');
 $list = array(
 	'ACCOUNTING_LENGTH_GACCOUNT',
 	'ACCOUNTING_LENGTH_AACCOUNT',
-//    'ACCOUNTING_LENGTH_DESCRIPTION',         // adjust size displayed for lines description for dol_trunc
-//    'ACCOUNTING_LENGTH_DESCRIPTION_ACCOUNT', // adjust size displayed for select account description for dol_trunc
+//	'ACCOUNTING_LIMIT_LIST_VENTILATION'		   // there is already a global parameter to define the nb of records in lists, we must use it in priority. Having one parameter for nb of record for each page is deprecated.
+//	'ACCOUNTING_LENGTH_DESCRIPTION',         // adjust size displayed for lines description for dol_trunc
+//	'ACCOUNTING_LENGTH_DESCRIPTION_ACCOUNT', // adjust size displayed for select account description for dol_trunc
 );
 
 $list_binding = array(
@@ -64,10 +65,8 @@ $list_binding = array(
 if ($action == 'update') {
 	$error = 0;
 
-	if (!$error)
-	{
-		foreach ($list as $constname)
-		{
+	if (!$error) {
+		foreach ($list as $constname) {
 			$constvalue = GETPOST($constname, 'alpha');
 
 			if (!dolibarr_set_const($db, $constname, $constvalue, 'chaine', 0, '', $conf->entity)) {
@@ -78,8 +77,7 @@ if ($action == 'update') {
 			setEventMessages($langs->trans("Error"), null, 'errors');
 		}
 
-		foreach ($list_binding as $constname)
-		{
+		foreach ($list_binding as $constname) {
 			$constvalue = GETPOST($constname, 'alpha');
 
 			if ($constname == 'ACCOUNTING_DATE_START_BINDING') {
@@ -103,8 +101,9 @@ if ($action == 'update') {
 if ($action == 'setlistsorttodo') {
 	$setlistsorttodo = GETPOST('value', 'int');
 	$res = dolibarr_set_const($db, "ACCOUNTING_LIST_SORT_VENTILATION_TODO", $setlistsorttodo, 'yesno', 0, '', $conf->entity);
-	if (!$res > 0)
+	if (!($res > 0)) {
 		$error++;
+	}
 
 	if (!$error) {
 		setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
@@ -116,8 +115,10 @@ if ($action == 'setlistsorttodo') {
 if ($action == 'setlistsortdone') {
 	$setlistsortdone = GETPOST('value', 'int');
 	$res = dolibarr_set_const($db, "ACCOUNTING_LIST_SORT_VENTILATION_DONE", $setlistsortdone, 'yesno', 0, '', $conf->entity);
-	if (!$res > 0)
+	if (!($res > 0)) {
 		$error++;
+	}
+
 	if (!$error) {
 		setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
 	} else {
@@ -128,8 +129,10 @@ if ($action == 'setlistsortdone') {
 if ($action == 'setmanagezero') {
 	$setmanagezero = GETPOST('value', 'int');
 	$res = dolibarr_set_const($db, "ACCOUNTING_MANAGE_ZERO", $setmanagezero, 'yesno', 0, '', $conf->entity);
-	if (!$res > 0)
+	if (!($res > 0)) {
 		$error++;
+	}
+
 	if (!$error) {
 		setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
 	} else {
@@ -140,8 +143,10 @@ if ($action == 'setmanagezero') {
 if ($action == 'setdisabledirectinput') {
 	$setdisabledirectinput = GETPOST('value', 'int');
 	$res = dolibarr_set_const($db, "BANK_DISABLE_DIRECT_INPUT", $setdisabledirectinput, 'yesno', 0, '', $conf->entity);
-	if (!$res > 0)
+	if (!($res > 0)) {
 		$error++;
+	}
+
 	if (!$error) {
 		setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
 	} else {
@@ -152,8 +157,10 @@ if ($action == 'setdisabledirectinput') {
 if ($action == 'setenabledraftexport') {
 	$setenabledraftexport = GETPOST('value', 'int');
 	$res = dolibarr_set_const($db, "ACCOUNTING_ENABLE_EXPORT_DRAFT_JOURNAL", $setenabledraftexport, 'yesno', 0, '', $conf->entity);
-	if (!$res > 0)
+	if (!($res > 0)) {
 		$error++;
+	}
+
 	if (!$error) {
 		setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
 	} else {
@@ -164,8 +171,10 @@ if ($action == 'setenabledraftexport') {
 if ($action == 'setenablesubsidiarylist') {
 	$setenablesubsidiarylist = GETPOST('value', 'int');
 	$res = dolibarr_set_const($db, "ACCOUNTANCY_COMBO_FOR_AUX", $setenablesubsidiarylist, 'yesno', 0, '', $conf->entity);
-	if (!$res > 0)
+	if (!($res > 0)) {
 		$error++;
+	}
+
 	if (!$error) {
 		setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
 	} else {
@@ -176,8 +185,10 @@ if ($action == 'setenablesubsidiarylist') {
 if ($action == 'setdisablebindingonsales') {
 	$setdisablebindingonsales = GETPOST('value', 'int');
 	$res = dolibarr_set_const($db, "ACCOUNTING_DISABLE_BINDING_ON_SALES", $setdisablebindingonsales, 'yesno', 0, '', $conf->entity);
-	if (!$res > 0)
+	if (!($res > 0)) {
 		$error++;
+	}
+
 	if (!$error) {
 		setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
 	} else {
@@ -188,8 +199,10 @@ if ($action == 'setdisablebindingonsales') {
 if ($action == 'setdisablebindingonpurchases') {
 	$setdisablebindingonpurchases = GETPOST('value', 'int');
 	$res = dolibarr_set_const($db, "ACCOUNTING_DISABLE_BINDING_ON_PURCHASES", $setdisablebindingonpurchases, 'yesno', 0, '', $conf->entity);
-	if (!$res > 0)
+	if (!($res > 0)) {
 		$error++;
+	}
+
 	if (!$error) {
 		setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
 	} else {
@@ -200,8 +213,10 @@ if ($action == 'setdisablebindingonpurchases') {
 if ($action == 'setdisablebindingonexpensereports') {
 	$setdisablebindingonexpensereports = GETPOST('value', 'int');
 	$res = dolibarr_set_const($db, "ACCOUNTING_DISABLE_BINDING_ON_EXPENSEREPORTS", $setdisablebindingonexpensereports, 'yesno', 0, '', $conf->entity);
-	if (!$res > 0)
+	if (!($res > 0)) {
 		$error++;
+	}
+
 	if (!$error) {
 		setEventMessages($langs->trans("SetupSaved"), null, 'mesgs');
 	} else {
@@ -209,9 +224,11 @@ if ($action == 'setdisablebindingonexpensereports') {
 	}
 }
 
+
 /*
  * View
  */
+
 $form = new Form($db);
 
 $title = $langs->trans('ConfigAccountingExpert');
@@ -263,6 +280,7 @@ print '</tr>';
 
 print '<tr class="oddeven">';
 print '<td>'.$langs->trans("ACCOUNTANCY_COMBO_FOR_AUX").'</td>';
+
 if (!empty($conf->global->ACCOUNTANCY_COMBO_FOR_AUX)) {
 	print '<td class="right"><a class="reposition" href="'.$_SERVER['PHP_SELF'].'?token='.newToken().'&enablesubsidiarylist&value=0">';
 	print img_picto($langs->trans("Activated"), 'switch_on');
@@ -288,11 +306,12 @@ if (!empty($conf->global->ACCOUNTING_MANAGE_ZERO)) {
 print '</tr>';
 
 // Param a user $user->rights->accounting->chartofaccount can access
-foreach ($list as $key)
-{
+foreach ($list as $key) {
 	print '<tr class="oddeven value">';
 
-	if (!empty($conf->global->ACCOUNTING_MANAGE_ZERO) && ($key == 'ACCOUNTING_LENGTH_GACCOUNT' || $key == 'ACCOUNTING_LENGTH_AACCOUNT')) continue;
+	if (!empty($conf->global->ACCOUNTING_MANAGE_ZERO) && ($key == 'ACCOUNTING_LENGTH_GACCOUNT' || $key == 'ACCOUNTING_LENGTH_AACCOUNT')) {
+		continue;
+	}
 
 	// Param
 	$label = $langs->trans($key);
@@ -341,8 +360,7 @@ if (!empty($conf->global->ACCOUNTING_LIST_SORT_VENTILATION_DONE)) {
 print '</tr>';
 
 // Param a user $user->rights->accounting->chartofaccount can access
-foreach ($list_binding as $key)
-{
+foreach ($list_binding as $key) {
 	print '<tr class="oddeven value">';
 
 	// Param
@@ -366,11 +384,11 @@ foreach ($list_binding as $key)
 print '<tr class="oddeven">';
 print '<td>'.$langs->trans("ACCOUNTING_DISABLE_BINDING_ON_SALES").'</td>';
 if (!empty($conf->global->ACCOUNTING_DISABLE_BINDING_ON_SALES)) {
-	print '<td class="right"><a class="reposition" href="'.$_SERVER['PHP_SELF'].'?token='.newToken().'&disablebindingonsales&value=0">';
+	print '<td class="right"><a class="reposition" href="'.$_SERVER['PHP_SELF'].'?token='.newToken().'&action=setdisablebindingonsales&value=0">';
 	print img_picto($langs->trans("Activated"), 'switch_on');
 	print '</a></td>';
 } else {
-	print '<td class="right"><a class="reposition" href="'.$_SERVER['PHP_SELF'].'?token='.newToken().'&disablebindingonsales&value=1">';
+	print '<td class="right"><a class="reposition" href="'.$_SERVER['PHP_SELF'].'?token='.newToken().'&action=setdisablebindingonsales&value=1">';
 	print img_picto($langs->trans("Disabled"), 'switch_off');
 	print '</a></td>';
 }
@@ -379,11 +397,11 @@ print '</tr>';
 print '<tr class="oddeven">';
 print '<td>'.$langs->trans("ACCOUNTING_DISABLE_BINDING_ON_PURCHASES").'</td>';
 if (!empty($conf->global->ACCOUNTING_DISABLE_BINDING_ON_PURCHASES)) {
-	print '<td class="right"><a class="reposition" href="'.$_SERVER['PHP_SELF'].'?token='.newToken().'&disablebindingonpurchases&value=0">';
+	print '<td class="right"><a class="reposition" href="'.$_SERVER['PHP_SELF'].'?token='.newToken().'&action=setdisablebindingonpurchases&value=0">';
 	print img_picto($langs->trans("Activated"), 'switch_on');
 	print '</a></td>';
 } else {
-	print '<td class="right"><a class="reposition" href="'.$_SERVER['PHP_SELF'].'?token='.newToken().'&disablebindingonpurchases&value=1">';
+	print '<td class="right"><a class="reposition" href="'.$_SERVER['PHP_SELF'].'?token='.newToken().'&action=setdisablebindingonpurchases&value=1">';
 	print img_picto($langs->trans("Disabled"), 'switch_off');
 	print '</a></td>';
 }
@@ -392,11 +410,11 @@ print '</tr>';
 print '<tr class="oddeven">';
 print '<td>'.$langs->trans("ACCOUNTING_DISABLE_BINDING_ON_EXPENSEREPORTS").'</td>';
 if (!empty($conf->global->ACCOUNTING_DISABLE_BINDING_ON_EXPENSEREPORTS)) {
-	print '<td class="right"><a class="reposition" href="'.$_SERVER['PHP_SELF'].'?token='.newToken().'&disablebindingonexpensereports&value=0">';
+	print '<td class="right"><a class="reposition" href="'.$_SERVER['PHP_SELF'].'?token='.newToken().'&action=setdisablebindingonexpensereports&value=0">';
 	print img_picto($langs->trans("Activated"), 'switch_on');
 	print '</a></td>';
 } else {
-	print '<td class="right"><a class="reposition" href="'.$_SERVER['PHP_SELF'].'?token='.newToken().'&disablebindingonexpensereports&value=1">';
+	print '<td class="right"><a class="reposition" href="'.$_SERVER['PHP_SELF'].'?token='.newToken().'&action=setdisablebindingonexpensereports&value=1">';
 	print img_picto($langs->trans("Disabled"), 'switch_off');
 	print '</a></td>';
 }

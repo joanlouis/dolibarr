@@ -62,11 +62,14 @@ class FormOrder extends Form
 			$options[$value] = $tmpsupplierorder->getLibStatut($short);
 		}
 
-	    if (is_array($selected)) $selectedarray = $selected;
-	    else $selectedarray = explode(',', $selected);
+		if (is_array($selected)) {
+			$selectedarray = $selected;
+		} else {
+			$selectedarray = explode(',', $selected);
+		}
 
-	    print Form::multiselectarray($hmlname, $options, $selectedarray, 0);
-    }
+		print Form::multiselectarray($hmlname, $options, $selectedarray, 0);
+	}
 
 	/**
 	 *	Return list of input method (mode used to receive order, like order received by email, fax, online)

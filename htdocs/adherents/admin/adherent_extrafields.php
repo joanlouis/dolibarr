@@ -37,13 +37,17 @@ $form = new Form($db);
 // List of supported format
 $tmptype2label = ExtraFields::$type2label;
 $type2label = array('');
-foreach ($tmptype2label as $key => $val) $type2label[$key] = $langs->transnoentitiesnoconv($val);
+foreach ($tmptype2label as $key => $val) {
+	$type2label[$key] = $langs->transnoentitiesnoconv($val);
+}
 
 $action = GETPOST('action', 'aZ09');
 $attrname = GETPOST('attrname', 'alpha');
 $elementtype = 'adherent'; //Must be the $table_element of the class that manage extrafield
 
-if (!$user->admin) accessforbidden();
+if (!$user->admin) {
+	accessforbidden();
+}
 
 
 /*
@@ -85,12 +89,7 @@ if ($action != 'create' && $action != 'edit') {
 }
 
 
-/* ************************************************************************** */
-/*                                                                            */
-/* Creation of an optional field											  */
-/*                                                                            */
-/* ************************************************************************** */
-
+// Creation of an optional field
 if ($action == 'create') {
 	print '<div name="topofform"></div><br>';
 	print load_fiche_titre($langs->trans('NewAttribute'));
@@ -98,11 +97,7 @@ if ($action == 'create') {
 	require DOL_DOCUMENT_ROOT.'/core/tpl/admin_extrafields_add.tpl.php';
 }
 
-/* ************************************************************************** */
-/*                                                                            */
-/* Edition of an optional field                                               */
-/*                                                                            */
-/* ************************************************************************** */
+// Edition of an optional field
 if ($action == 'edit' && !empty($attrname)) {
 	print '<div name="topofform"></div><br>';
 	print load_fiche_titre($langs->trans("FieldEdition", $attrname));
